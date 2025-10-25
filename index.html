@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>不老平衡骨架中心 - 線上預約</title>
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+  <style>
+    body { font-family: sans-serif; padding: 20px; }
+    input, select, button { margin: 10px 0; padding: 8px; width: 100%; }
+  </style>
+</head>
+<body>
+  <h2>不老平衡骨架中心｜線上預約</h2>
+  <div id="userInfo"></div>
+
+  <form id="bookingForm">
+    <label>選擇療程：</label>
+    <select name="treatment">
+      <option value="整脊調理">整脊調理</option>
+      <option value="經絡疏通">經絡疏通</option>
+      <option value="筋膜放鬆">筋膜放鬆</option>
+    </select>
+
+    <label>選擇老師：</label>
+    <select name="therapist">
+      <option value="王老師">王老師</option>
+      <option value="陳老師">陳老師</option>
+    </select>
+
+    <label>預約日期：</label>
+    <input type="date" name="date" required />
+
+    <label>預約時間：</label>
+    <input type="time" name="time" required />
+
+    <button type="submit">送出預約</button>
+  </form>
+
+  <script>
+    async function initLIFF() {
+      await liff.init({ liffId: "YOUR_LIFF_ID" }); // ← 替換成你的 LIFF ID
+      if (!liff.isLoggedIn()) {
+        liff.login();
+      } else {
+        const profile = await liff.getProfile();
+        document.getElementById("userInfo").innerHTML =
+          `<p>您好，${profile.displayName}！</p>`;
+        window.userId = profile.userId;
+      }
+    }
+
+    document.getElementById("bookingForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const form = e.target;
+      const data = {
+        userId: window.userId,
+        treatment: form.treatment.value,
+        therapist: form.therapist.value,
+        date: form.date.value,
+        time: form.time.value
+      };
+
+      // 送出到你的後端 API（可用 Firebase、Airtable 或 Node.js）
+      const res = await fetch("https://your-api.com/bookings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+
+      if (res.ok) {
+        alert("預約成功！");
+        liff.sendMessages([{
+          type: "text",
+          text: `您已成功預約 ${data.date} ${data.time} 的 ${data.treatment}，由 ${data.therapist} 為您服務。`
+        }]);
+        liff.closeWindow();
+      } else {
+        alert("預約失敗，請稍後再試");
+      }
+    });
+
+    initLIFF();
+  </script>
+</body>
+</html>
