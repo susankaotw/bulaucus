@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <!-- 可選：放寬 frame 來源，避免被擋 -->
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self' https: data: blob:;
+                 script-src 'self' https://widgets.simplybook.it 'unsafe-inline' 'unsafe-eval';
+                 style-src 'self' 'unsafe-inline' https:;
+                 img-src 'self' https: data:;
+                 frame-src https://*.simplybook.* https://*.line.me;
+                 connect-src https:;">
+  <title>不老骨架平衡中心｜預約</title>
+  <style>
+    html,body,#sb_wrap { height:100%; margin:0; background:#fff; }
+    #sb_wrap { display:flex; align-items:stretch; }
+    #sb_widget { flex:1; min-height:100vh; }
+  </style>
+</head>
+<body>
+  <div id="sb_wrap"><div id="sb_widget"></div></div>
+
+  <!-- 官方 widget 腳本 -->
+  <script src="https://widgets.simplybook.it/v2/widget/widget.js"></script>
+  <script>
+    // 依你的 SimplyBook 設定調整
+    new SimplybookWidget({
+      widget_type: "iframe",
+      url: "https://bulau.simplybook.asia",
+      theme: "bookingtreat_v2",
+      theme_settings: { hide_past_days: "1" }
+    });
+  </script>
+</body>
+</html>
